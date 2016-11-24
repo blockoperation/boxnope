@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            attributeFormDefault="unqualified"
+            elementFormDefault="qualified">
+
+<xsd:element name="boxnope_menu">
+    <xsd:complexType mixed="false">
+        <xsd:sequence maxOccurs="1" minOccurs="1">
+            <xsd:element name="menu" type="menu"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:complexType name="menu">
+    <xsd:choice maxOccurs="unbounded" minOccurs="0">
+        <xsd:element name="menu" type="menu"/>
+        <xsd:element name="separator" type="separator"/>
+        <xsd:element name="action" type="action"/>
+    </xsd:choice>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="icon" type="xsd:string" use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="separator">
+    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="action">
+    <xsd:choice maxOccurs="unbounded" minOccurs="0">
+        <xsd:element name="argument" type="argument"/>
+    </xsd:choice>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="type" type="actiontype" use="required"/>
+    <xsd:attribute name="icon" type="xsd:string" use="optional"/>
+    <xsd:attribute name="command" type="xsd:string" use="optional"/>
+    <xsd:attribute name="confirm" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+
+<xsd:simpleType name="actiontype">
+    <xsd:restriction base="xsd:string">
+        <xsd:pattern value="system"/>
+        <xsd:pattern value="detach"/>
+        <xsd:pattern value="exit"/>
+    </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:complexType name="argument">
+    <xsd:attribute name="value" type="xsd:string" use="required"/>
+</xsd:complexType>
+
+</xsd:schema>
