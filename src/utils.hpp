@@ -9,7 +9,4 @@
 #define QSL(s) QStringLiteral(s)
 #define QL1S(s) QLatin1String(s)
 
-#define QC(s) QChar(c)
-#define QL1C(c) QLatin1Char(c)
-
 #endif
