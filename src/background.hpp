@@ -14,6 +14,7 @@ public:
 
     void setWallpaper(const QPixmap& wallpaper);
     void setMenu(QMenu* menu);
+    void doResize(const QRect& g);
 
 protected:
     virtual void paintEvent(QPaintEvent*) override;

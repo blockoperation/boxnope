@@ -47,17 +47,10 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
     wallpaper_scaled_(),
     menu_(nullptr)
 {
-    {
-        QRect g = scr->virtualGeometry();
-        move(g.x(), g.y());
-        resize(g.width(), g.height());
-    }
-
+    doResize(scr->virtualGeometry());
     QObject::connect(scr, &QScreen::virtualGeometryChanged, [this](const QRect& g)
     {
-        move(g.x(), g.y());
-        resize(g.width(), g.height());
-        wallpaper_scaled_ = wallpaper_.scaled(width(), height());
+        doResize(g);
     });
 
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -79,6 +72,14 @@ void BackgroundWindow::setWallpaper(const QPixmap& wallpaper)
 void BackgroundWindow::setMenu(QMenu* menu)
 {
     menu_ = menu;
+}
+
+void BackgroundWindow::doResize(const QRect& g)
+{
+    setGeometry(g);
+
+    if (!wallpaper_.isNull())
+        wallpaper_scaled_ = wallpaper_.scaled(g.width(), g.height());
 }
 
 void BackgroundWindow::paintEvent(QPaintEvent*)
