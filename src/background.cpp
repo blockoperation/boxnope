@@ -48,12 +48,12 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
     menu_(nullptr)
 {
     {
-        QRect g = scr->geometry();
+        QRect g = scr->virtualGeometry();
         move(g.x(), g.y());
         resize(g.width(), g.height());
     }
 
-    QObject::connect(scr, &QScreen::geometryChanged, [this](const QRect& g)
+    QObject::connect(scr, &QScreen::virtualGeometryChanged, [this](const QRect& g)
     {
         move(g.x(), g.y());
         resize(g.width(), g.height());
