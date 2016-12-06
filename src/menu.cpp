@@ -21,7 +21,7 @@ enum class ActionType
 {
     None,
     System,
-    Detach,
+    Exec,
     Exit
 };
 
@@ -29,8 +29,8 @@ ActionType getActionType(QString s)
 {
     if (s == QL1S("system"))
         return ActionType::System;
-    else if (s == QL1S("detach"))
-        return ActionType::Detach;
+    else if (s == QL1S("exec"))
+        return ActionType::Exec;
     else if (s == QL1S("exit"))
         return ActionType::Exit;
 
@@ -70,7 +70,7 @@ void addMenuAction(QApplication* app, QMenu* menu, const Action& act)
             });
             break;
 
-        case ActionType::Detach:
+        case ActionType::Exec:
             QObject::connect(qact, &QAction::triggered, [act]()
             {
                 if (!act.confirm || confirmAction(act.name))

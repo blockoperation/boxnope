@@ -40,7 +40,7 @@
 <xsd:simpleType name="actiontype">
     <xsd:restriction base="xsd:string">
         <xsd:pattern value="system"/>
-        <xsd:pattern value="detach"/>
+        <xsd:pattern value="exec"/>
         <xsd:pattern value="exit"/>
     </xsd:restriction>
 </xsd:simpleType>
