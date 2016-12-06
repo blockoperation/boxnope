@@ -58,6 +58,12 @@ struct Arguments
             QSL("Path to wallpaper"),
             "file"
         },
+        wallpaper_mode{
+            {QSL("d"), QSL("wallpaper-mode")},
+            QSL("Wallpaper mode: fill, scale (default) or tile"),
+            QSL("mode"),
+            QSL("scale")
+        },
         menu{
             {QSL("m"), QSL("menu")},
             QSL("Path to menu configuration"),
@@ -71,6 +77,7 @@ struct Arguments
     QCommandLineOption autostart;
     QCommandLineOption autostart_args;
     QCommandLineOption wallpaper;
+    QCommandLineOption wallpaper_mode;
     QCommandLineOption menu;
 };
 
@@ -92,7 +99,7 @@ int main(int argc, char* argv[])
     arg_parser.addOptions({
         args.wm, args.wm_args,
         args.autostart, args.autostart_args,
-        args.wallpaper,
+        args.wallpaper, args.wallpaper_mode,
         args.menu
     });
     arg_parser.process(app);
@@ -100,7 +107,8 @@ int main(int argc, char* argv[])
     // Set up background window
     BackgroundWindow win(QGuiApplication::primaryScreen(), nullptr);
     if (arg_parser.isSet(args.wallpaper))
-        win.setWallpaper(QPixmap(arg_parser.value(args.wallpaper)));
+        win.setWallpaper(QPixmap(arg_parser.value(args.wallpaper)),
+                         getWallpaperMode(arg_parser.value(args.wallpaper_mode)));
     win.show();
 
     // Start window manager

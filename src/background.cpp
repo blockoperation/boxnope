@@ -12,6 +12,8 @@
 
 #include <xcb/xcb.h>
 
+#include "utils.hpp"
+
 namespace
 {
 
@@ -41,10 +43,23 @@ void xcbSetDesktopWindow(xcb_connection_t* c, xcb_window_t wid)
 
 }
 
+WallpaperMode getWallpaperMode(QString s)
+{
+    if (s == QL1S("fill"))
+        return WallpaperMode::Fill;
+    else if (s == QL1S("scale"))
+        return WallpaperMode::Scale;
+    else if (s == QL1S("tile"))
+        return WallpaperMode::Tile;
+
+    return WallpaperMode::None;
+}
+
 BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
 :   QMainWindow(parent),
+    wallpaper_orig_(),
     wallpaper_(),
-    wallpaper_scaled_(),
+    wallpaper_mode_(WallpaperMode::None),
     menu_(nullptr)
 {
     doResize(scr->virtualGeometry());
@@ -63,9 +78,10 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
     xcbSetDesktopWindow(QX11Info::connection(), winId());
 }
 
-void BackgroundWindow::setWallpaper(const QPixmap& wallpaper)
+void BackgroundWindow::setWallpaper(const QPixmap& wallpaper, WallpaperMode mode)
 {
-    wallpaper_ = wallpaper;
+    wallpaper_mode_ = mode;
+    wallpaper_orig_ = wallpaper;
     updateWallpaper();
 }
 
@@ -83,19 +99,41 @@ void BackgroundWindow::doResize(const QRect& g)
 void BackgroundWindow::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
-    painter.drawPixmap(0, 0, wallpaper_scaled_);
+
+    if (wallpaper_mode_ == WallpaperMode::Tile)
+        painter.drawTiledPixmap(geometry(), wallpaper_);
+    else
+        painter.drawPixmap(0, 0, wallpaper_);
 }
 
 void BackgroundWindow::updateWallpaper()
 {
-    if (wallpaper_.isNull())
+    if (wallpaper_orig_.isNull())
+        wallpaper_mode_ = WallpaperMode::None;
+
+    switch (wallpaper_mode_)
     {
-        wallpaper_scaled_ = QPixmap(size());
-        wallpaper_scaled_.fill(Qt::black);
-    }
-    else
-    {
-        wallpaper_scaled_ = wallpaper_.scaled(size(), Qt::IgnoreAspectRatio,
-                                              Qt::SmoothTransformation);
+        case WallpaperMode::Fill:
+            wallpaper_ = wallpaper_orig_.scaled(size(), Qt::KeepAspectRatioByExpanding,
+                                                Qt::SmoothTransformation);
+            break;
+
+        case WallpaperMode::Scale:
+            wallpaper_ = wallpaper_orig_.scaled(size(), Qt::IgnoreAspectRatio,
+                                                Qt::SmoothTransformation);
+            break;
+
+        case WallpaperMode::Tile:
+            wallpaper_ = wallpaper_orig_;
+            break;
+
+        case WallpaperMode::None:
+            if (wallpaper_.size() != size())
+                wallpaper_ = QPixmap(size());
+            wallpaper_.fill(Qt::black);
+            break;
+
+        default:
+            break;
     }
 }

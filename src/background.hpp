@@ -7,12 +7,22 @@
 
 #include <QMainWindow>
 
+enum class WallpaperMode
+{
+    Fill,
+    Scale,
+    Tile,
+    None
+};
+
+WallpaperMode getWallpaperMode(QString s);
+
 class BackgroundWindow : public QMainWindow
 {
 public:
     BackgroundWindow(QScreen* scr, QWidget* parent);
 
-    void setWallpaper(const QPixmap& wallpaper);
+    void setWallpaper(const QPixmap& wallpaper, WallpaperMode mode);
     void setMenu(QMenu* menu);
     void doResize(const QRect& g);
 
@@ -20,8 +30,9 @@ protected:
     virtual void paintEvent(QPaintEvent*) override;
 
 private:
+    QPixmap wallpaper_orig_;
     QPixmap wallpaper_;
-    QPixmap wallpaper_scaled_;
+    WallpaperMode wallpaper_mode_;
     QMenu* menu_;
 
     void updateWallpaper();

@@ -27,9 +27,5 @@ use KWin without Plasma. Think of it as a *box WM without the WM itself.
 
   * Desktop switching menu
   * Ability to reconfigure/restart a running instance
-  * Support for multiple screens (regular RandR setups should work already)
-  * More wallpaper options
-    * More scaling options (e.g. center, tile, max with aspect retained, etc)
-    * Different wallpaper per screen
-    * Span a single wallpaper across multiple screens
+  * Different wallpaper per-screen
   * Documentation!
