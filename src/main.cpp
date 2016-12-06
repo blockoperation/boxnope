@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     QApplication::setApplicationName(QSL("boxnope"));
-    QApplication::setApplicationVersion(QSL("0.2"));
+    QApplication::setApplicationVersion(QSL("0.3"));
     QObject::connect(&app, &QApplication::lastWindowClosed, [&app]() { app.quit(); });
 
     QCommandLineParser arg_parser;
