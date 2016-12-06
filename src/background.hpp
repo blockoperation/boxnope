@@ -23,6 +23,8 @@ private:
     QPixmap wallpaper_;
     QPixmap wallpaper_scaled_;
     QMenu* menu_;
+
+    void updateWallpaper();
 };
 
 #endif

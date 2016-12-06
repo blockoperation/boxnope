@@ -66,7 +66,7 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
 void BackgroundWindow::setWallpaper(const QPixmap& wallpaper)
 {
     wallpaper_ = wallpaper;
-    wallpaper_scaled_ = wallpaper.scaled(width(), height());
+    updateWallpaper();
 }
 
 void BackgroundWindow::setMenu(QMenu* menu)
@@ -77,16 +77,25 @@ void BackgroundWindow::setMenu(QMenu* menu)
 void BackgroundWindow::doResize(const QRect& g)
 {
     setGeometry(g);
-
-    if (!wallpaper_.isNull())
-        wallpaper_scaled_ = wallpaper_.scaled(g.width(), g.height());
+    updateWallpaper();
 }
 
 void BackgroundWindow::paintEvent(QPaintEvent*)
 {
-    if (!wallpaper_scaled_.isNull())
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, wallpaper_scaled_);
+}
+
+void BackgroundWindow::updateWallpaper()
+{
+    if (wallpaper_.isNull())
     {
-        QPainter painter(this);
-        painter.drawPixmap(0, 0, wallpaper_scaled_);
+        wallpaper_scaled_ = QPixmap(size());
+        wallpaper_scaled_.fill(Qt::black);
+    }
+    else
+    {
+        wallpaper_scaled_ = wallpaper_.scaled(size(), Qt::IgnoreAspectRatio,
+                                              Qt::SmoothTransformation);
     }
 }
