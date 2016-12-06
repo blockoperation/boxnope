@@ -56,7 +56,7 @@ WallpaperMode getWallpaperMode(QString s)
 }
 
 BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
-:   QMainWindow(parent),
+:   QWidget(parent),
     wallpaper_orig_(),
     wallpaper_(),
     wallpaper_mode_(WallpaperMode::None),
@@ -69,7 +69,7 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
     });
 
     setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, &QMainWindow::customContextMenuRequested, [this](const QPoint& pos)
+    connect(this, &QWidget::customContextMenuRequested, [this](const QPoint& pos)
     {
         if (menu_)
             menu_->popup(mapToGlobal(pos));

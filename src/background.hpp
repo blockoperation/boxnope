@@ -5,7 +5,8 @@
 #ifndef BOXNOPE_BACKGROUND_HPP
 #define BOXNOPE_BACKGROUND_HPP
 
-#include <QMainWindow>
+#include <QWidget>
+#include <QMenu>
 
 enum class WallpaperMode
 {
@@ -17,7 +18,7 @@ enum class WallpaperMode
 
 WallpaperMode getWallpaperMode(QString s);
 
-class BackgroundWindow : public QMainWindow
+class BackgroundWindow : public QWidget
 {
 public:
     BackgroundWindow(QScreen* scr, QWidget* parent);
