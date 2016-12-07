@@ -25,10 +25,10 @@ public:
 
     void setWallpaper(const QPixmap& wallpaper, WallpaperMode mode);
     void setMenu(QMenu* menu);
-    void doResize(const QRect& g);
 
 protected:
     virtual void paintEvent(QPaintEvent*) override;
+    virtual void resizeEvent(QResizeEvent*) override;
 
 private:
     QPixmap wallpaper_orig_;

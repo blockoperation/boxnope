@@ -62,10 +62,10 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
     wallpaper_mode_(WallpaperMode::None),
     menu_(nullptr)
 {
-    doResize(scr->virtualGeometry());
-    QObject::connect(scr, &QScreen::virtualGeometryChanged, [this](const QRect& g)
+    setGeometry(scr->virtualGeometry());
+    connect(scr, &QScreen::virtualGeometryChanged, this, [this](const QRect& g)
     {
-        doResize(g);
+        setGeometry(g);
     });
 
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -90,12 +90,6 @@ void BackgroundWindow::setMenu(QMenu* menu)
     menu_ = menu;
 }
 
-void BackgroundWindow::doResize(const QRect& g)
-{
-    setGeometry(g);
-    updateWallpaper();
-}
-
 void BackgroundWindow::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
@@ -104,6 +98,11 @@ void BackgroundWindow::paintEvent(QPaintEvent*)
         painter.drawTiledPixmap(geometry(), wallpaper_);
     else
         painter.drawPixmap(0, 0, wallpaper_);
+}
+
+void BackgroundWindow::resizeEvent(QResizeEvent*)
+{
+    updateWallpaper();
 }
 
 void BackgroundWindow::updateWallpaper()
