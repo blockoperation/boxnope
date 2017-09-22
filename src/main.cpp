@@ -2,6 +2,7 @@
 // boxnope is distributed under the terms of the BSD license.
 // See LICENSE for details.
 
+#include <QApplication>
 #include <QCommandLineParser>
 #include <QProcess>
 
@@ -147,7 +148,7 @@ int main(int argc, char* argv[])
     // Set up menu
     QMenu* menu = nullptr;
     if (arg_parser.isSet(args.menu))
-        menu = createMenuFromFile(&app, &win, arg_parser.value(args.menu));
+        menu = createMenuFromFile(&win, arg_parser.value(args.menu));
 
     if (menu)
     {

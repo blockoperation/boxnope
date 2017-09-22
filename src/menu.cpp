@@ -4,6 +4,7 @@
 
 #include "menu.hpp"
 
+#include <QApplication>
 #include <QFile>
 #include <QIcon>
 #include <QMessageBox>
@@ -52,7 +53,7 @@ inline bool confirmAction(QString name)
     return (QMessageBox::question(nullptr, name, QSL("Confirm?")) == QMessageBox::Yes);
 }
 
-void addMenuAction(QApplication* app, QMenu* menu, const Action& act)
+void addMenuAction(QMenu* menu, const Action& act)
 {
     QAction* qact = new QAction(act.icon, act.name, menu);
 
@@ -79,10 +80,10 @@ void addMenuAction(QApplication* app, QMenu* menu, const Action& act)
             break;
 
         case ActionType::Exit:
-            QObject::connect(qact, &QAction::triggered, [act, app]()
+            QObject::connect(qact, &QAction::triggered, [act]()
             {
                 if (!act.confirm || confirmAction(act.name))
-                    app->quit();
+                    qApp->quit();
             });
             break;
 
@@ -134,12 +135,11 @@ inline bool attrToBool(const QXmlStreamAttributes& attrs, QLatin1String name)
 class MenuParser
 {
 public:
-    MenuParser(QApplication* app, QWidget* parent, const QByteArray& data);
+    MenuParser(QWidget* parent, const QByteArray& data);
 
     QMenu* parse();
 
 private:
-    QApplication* app_;
     QWidget* parent_;
     QXmlStreamReader xml_;
     std::vector<QMenu*> menus_;
@@ -150,9 +150,8 @@ private:
     void closeTag();
 };
 
-MenuParser::MenuParser(QApplication* app, QWidget* parent, const QByteArray& data)
-:   app_(app),
-    parent_(parent),
+MenuParser::MenuParser(QWidget* parent, const QByteArray& data)
+:   parent_(parent),
     xml_(data),
     menus_(),
     curr_tag_(TagType::None),
@@ -290,7 +289,7 @@ void MenuParser::closeTag()
             break;
 
         case TagType::Action:
-            addMenuAction(app_, menus_.back(), curr_action_);
+            addMenuAction(menus_.back(), curr_action_);
 
             curr_tag_ = TagType::Menu;
             break;
@@ -313,7 +312,7 @@ bool validateMenu(const QByteArray& data)
 
 }
 
-QMenu* createMenuFromFile(QApplication* app, QWidget* parent, QString filename)
+QMenu* createMenuFromFile(QWidget* parent, QString filename)
 {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -323,6 +322,6 @@ QMenu* createMenuFromFile(QApplication* app, QWidget* parent, QString filename)
     if (!validateMenu(data))
         return nullptr;
 
-    MenuParser parser(app, parent, data);
+    MenuParser parser(parent, data);
     return parser.parse();
 }

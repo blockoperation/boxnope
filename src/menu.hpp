@@ -5,9 +5,8 @@
 #ifndef BOXNOPE_MENU_HPP
 #define BOXNOPE_MENU_HPP
 
-#include <QApplication>
 #include <QMenu>
 
-QMenu* createMenuFromFile(QApplication* app, QWidget* parent, QString filename);
+QMenu* createMenuFromFile(QWidget* parent, QString filename);
 
 #endif
