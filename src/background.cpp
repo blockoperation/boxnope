@@ -62,6 +62,12 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
     wallpaper_mode_(WallpaperMode::None),
     menu_(nullptr)
 {
+    setWindowFlags(
+        Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnBottomHint
+    );
+    setAttribute(Qt::WA_X11NetWmWindowTypeDesktop);
+    xcbSetDesktopWindow(QX11Info::connection(), winId());
+
     setGeometry(scr->virtualGeometry());
     connect(scr, &QScreen::virtualGeometryChanged, this, [this](const QRect& g)
     {
@@ -74,8 +80,6 @@ BackgroundWindow::BackgroundWindow(QScreen* scr, QWidget* parent)
         if (menu_)
             menu_->popup(mapToGlobal(pos));
     });
-
-    xcbSetDesktopWindow(QX11Info::connection(), winId());
 }
 
 void BackgroundWindow::setWallpaper(const QPixmap& wallpaper, WallpaperMode mode)
