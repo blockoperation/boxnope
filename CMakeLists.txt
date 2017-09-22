@@ -2,7 +2,7 @@ project(boxnope)
 cmake_minimum_required(VERSION 2.8.11)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -ffunction-sections -fdata-sections -Wl,--gc-sections -O2 -Wall -Wextra -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -ffunction-sections -fdata-sections -Wl,--gc-sections -O2 -W -Wall -Wextra -pedantic")
 
 set(boxnope_source src/main.cpp src/background.cpp src/menu.cpp)
 set(boxnope_link)
