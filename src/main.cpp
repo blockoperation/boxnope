@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     QApplication::setApplicationName(QSL("boxnope"));
-    QApplication::setApplicationVersion(QSL("0.3"));
+    QApplication::setApplicationVersion(QSL("0.4"));
     QObject::connect(&app, &QApplication::lastWindowClosed, [&app]()
     {
         app.quit();
