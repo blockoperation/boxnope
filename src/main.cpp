@@ -88,7 +88,10 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     QApplication::setApplicationName(QSL("boxnope"));
     QApplication::setApplicationVersion(QSL("0.3"));
-    QObject::connect(&app, &QApplication::lastWindowClosed, [&app]() { app.quit(); });
+    QObject::connect(&app, &QApplication::lastWindowClosed, [&app]()
+    {
+        app.quit();
+    });
 
     QCommandLineParser arg_parser;
     arg_parser.setApplicationDescription(QSL("A simple X11 session/launcher"));
@@ -105,7 +108,7 @@ int main(int argc, char* argv[])
     arg_parser.process(app);
 
     // Set up background window
-    BackgroundWindow win(QGuiApplication::primaryScreen(), nullptr);
+    BackgroundWindow win(QGuiApplication::primaryScreen());
     if (arg_parser.isSet(args.wallpaper))
         win.setWallpaper(QPixmap(arg_parser.value(args.wallpaper)),
                          getWallpaperMode(arg_parser.value(args.wallpaper_mode)));
@@ -115,7 +118,10 @@ int main(int argc, char* argv[])
     QProcess wm;
     if (arg_parser.isSet(args.wm))
     {
-        wm.start(arg_parser.value(args.wm), arg_parser.values(args.wm_args));
+        wm.start(
+            arg_parser.value(args.wm),
+            arg_parser.values(args.wm_args)
+        );
         wm.waitForStarted();
     }
 

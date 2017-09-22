@@ -124,8 +124,10 @@ inline QString attrToStr(const QXmlStreamAttributes& attrs, QLatin1String name)
     return attrs.value(name).toString();
 }
 
-inline bool attrToBool(QString s)
+inline bool attrToBool(const QXmlStreamAttributes& attrs, QLatin1String name)
 {
+    QString s(attrToStr(attrs, name));
+
     return (s == QL1S("true") || s == QL1S("1"));
 }
 
@@ -242,8 +244,9 @@ void MenuParser::openTag()
                 QIcon::fromTheme(attrToStr(attrs, QL1S("icon"))),
                 attrToStr(attrs, QL1S("command")),
                 {},
-                attrToBool(attrToStr(attrs, QL1S("confirm")))
+                attrToBool(attrs, QL1S("confirm"))
             };
+
             curr_tag_ = TagType::Action;
             break;
 
@@ -288,6 +291,7 @@ void MenuParser::closeTag()
 
         case TagType::Action:
             addMenuAction(app_, menus_.back(), curr_action_);
+
             curr_tag_ = TagType::Menu;
             break;
 
@@ -300,7 +304,6 @@ bool validateMenu(const QByteArray& data)
 {
     QXmlSchema schema;
     schema.load(QUrl::fromLocalFile(QSL(":/boxnope_menu.xsd")));
-
     if (!schema.isValid())
         return false;
 
@@ -313,12 +316,10 @@ bool validateMenu(const QByteArray& data)
 QMenu* createMenuFromFile(QApplication* app, QWidget* parent, QString filename)
 {
     QFile file(filename);
-
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return nullptr;
 
     QByteArray data(file.readAll());
-
     if (!validateMenu(data))
         return nullptr;
 

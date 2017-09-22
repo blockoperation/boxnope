@@ -21,14 +21,14 @@ WallpaperMode getWallpaperMode(QString s);
 class BackgroundWindow : public QWidget
 {
 public:
-    BackgroundWindow(QScreen* scr, QWidget* parent);
+    BackgroundWindow(QScreen* scr, QWidget* parent = nullptr);
 
     void setWallpaper(const QPixmap& wallpaper, WallpaperMode mode);
     void setMenu(QMenu* menu);
 
 protected:
-    virtual void paintEvent(QPaintEvent*) override;
-    virtual void resizeEvent(QResizeEvent*) override;
+    void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
 
 private:
     QPixmap wallpaper_orig_;
