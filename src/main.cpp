@@ -1,4 +1,4 @@
-// Copyright (c) 2016, blockoperation. All rights reserved.
+// Copyright (c) 2016-2017, blockoperation. All rights reserved.
 // boxnope is distributed under the terms of the BSD license.
 // See LICENSE for details.
 
